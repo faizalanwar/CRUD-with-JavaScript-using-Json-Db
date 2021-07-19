@@ -1,20 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    const bookContainer = document.querySelector('#book-container')
+  const bookContainer = document.querySelector('#book-container')
 
-    const submit = document.getElementById('#submit')
-    const bookURL = 'http://localhost:3000/tamu'
-    // const bookURL = 'https://anww.herokuapp.com/tamu'
-    const bookForm = document.querySelector('#book-form')
-    let allBooks = []
-    
+  const submit = document.getElementById('#submit')
+  const bookURL = 'http://localhost:3000/tamu'
+  // const bookURL = 'https://anww.herokuapp.com/tamu'
+  const bookForm = document.querySelector('#book-form')
+  let allBooks = []
 
 
-    fetch(`${bookURL}`)
-      .then(response => response.json())
-      .then(bookData => bookData.forEach(function (book) {
-        allBooks = bookData
-        bookContainer.innerHTML += `
+
+  fetch(`${bookURL}`)
+    .then(response => response.json())
+    .then(bookData => bookData.forEach(function (book) {
+      allBooks = bookData
+      bookContainer.innerHTML += `
         <tr id="book-${book.id}">
         <td>${book.id}</td>
           <td>${book.title}</td>
@@ -27,41 +27,42 @@ document.addEventListener('DOMContentLoaded', function () {
           </td>
 
         </tr>`
-      })) // end of book fetch
+    })) // end of book fetch
 
 
-    bookForm.addEventListener('submit', (e) => {
-      e.preventDefault()
-      
-      document.getElementById("alert").outerHTML=`<div class="alert alert-success" id="alert" role="alert">
-          A simple success alert—check it out!
-      </div>`
-      // console.log(e.target)
-      window.setTimeout(function(){
-        document.getElementById("alert").classList.add("none");
-      }, 5000);
-      
- 
+  bookForm.addEventListener('submit', (e) => {
+    e.preventDefault()
 
-      const titleInput = bookForm.querySelector('#title').value
-      const authorInput = bookForm.querySelector('#author').value
-      const coverImageInput = bookForm.querySelector('#coverImage').value
-      const descInput = bookForm.querySelector('#description').value
 
-      fetch(`${bookURL}`, {
-        method: 'POST',
-        body: JSON.stringify({
-          title: titleInput,
-          author: authorInput,
-          coverImage: coverImageInput,
-          description: descInput
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(response => response.json())
-        .then(book => {
-          bookContainer.innerHTML += `
+
+
+    const titleInput = bookForm.querySelector('#title').value
+    const authorInput = bookForm.querySelector('#author').value
+    const coverImageInput = bookForm.querySelector('#coverImage').value
+    const descInput = bookForm.querySelector('#description').value
+    bookForm.reset();
+    document.getElementById("alert").outerHTML = `<div class="alert alert-success" id="alert" role="alert">
+    Data ${titleInput} berhasil ditambah
+  </div>`
+    // console.log(e.target)
+    window.setTimeout(function () {
+      document.getElementById("alert").classList.add("none");
+    }, 5000);
+
+    fetch(`${bookURL}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        title: titleInput,
+        author: authorInput,
+        coverImage: coverImageInput,
+        description: descInput
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(book => {
+        bookContainer.innerHTML += `
           <tr id="book-${book.id}">
           <td>${book.id}</td>
             <td>${book.title}</td>
@@ -74,18 +75,18 @@ document.addEventListener('DOMContentLoaded', function () {
             </td>
   
           </tr>`
-        })
-      
-        
-    })
+      })
 
 
-    bookContainer.addEventListener('click', (e) => {
-      if (e.target.dataset.action === 'edit') {
-        const editButton = document.querySelector(`#edit-${e.target.dataset.id}`)
+  })
+
+
+  bookContainer.addEventListener('click', (e) => {
+    if (e.target.dataset.action === 'edit') {
+      const editButton = document.querySelector(`#edit-${e.target.dataset.id}`)
       editButton.disabled = true
-      
-   
+
+
       const bookData = allBooks.find((book) => {
         return book.id == e.target.dataset.id
       })
@@ -100,28 +101,28 @@ document.addEventListener('DOMContentLoaded', function () {
       </div>`
 
       const editForm = document.querySelector('#edit-form')
-    
-    editForm.addEventListener("submit", (e) => {
-      e.preventDefault()
-      const titleInput = document.querySelector("#edit-title").value
-      const authorInput = document.querySelector("#edit-author").value
-      const coverImageInput = document.querySelector("#edit-coverImage").value
-      const descInput = document.querySelector("#edit-description").value
-      const editedBook = document.querySelector(`#book-${bookData.id}`)
-      fetch(`${bookURL}/${bookData.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          title: titleInput,
-          author: authorInput,
-          coverImage: coverImageInput,
-          description: descInput
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then( response => response.json() )
-      .then( book => {
-        editedBook.innerHTML = `
+
+      editForm.addEventListener("submit", (e) => {
+        e.preventDefault()
+        const titleInput = document.querySelector("#edit-title").value
+        const authorInput = document.querySelector("#edit-author").value
+        const coverImageInput = document.querySelector("#edit-coverImage").value
+        const descInput = document.querySelector("#edit-description").value
+        const editedBook = document.querySelector(`#book-${bookData.id}`)
+        fetch(`${bookURL}/${bookData.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            title: titleInput,
+            author: authorInput,
+            coverImage: coverImageInput,
+            description: descInput
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(response => response.json())
+          .then(book => {
+            editedBook.innerHTML = `
         <tr id="book-${book.id}">
         <td>${book.id}</td>
           <td>${book.title}</td>
@@ -136,21 +137,21 @@ document.addEventListener('DOMContentLoaded', function () {
         </tr>
         <div id=edit-book-${book.id}>
         </div>`
-        editForm.innerHTML = ""
-      })
-  }) // end of this event Listener for edit submit
+            editForm.innerHTML = ""
+          })
+      }) // end of this event Listener for edit submit
 
-      } else if (e.target.dataset.action === 'delete') {
-        document.querySelector(`#book-${e.target.dataset.id}`).remove()
-        
-        fetch(`${bookURL}/${e.target.dataset.id}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then( response => response.json())
-      }
-    })
+    } else if (e.target.dataset.action === 'delete') {
+      document.querySelector(`#book-${e.target.dataset.id}`).remove()
+
+      fetch(`${bookURL}/${e.target.dataset.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+    }
+  })
 
 
 
