@@ -2,17 +2,29 @@
   "tamu": [
     {
       "title": "sdf",
-      "author": "sd",
-      "coverImage": "https://miro.medium.com/max/523/1*FgThkysqTLbHMObTVGz97w.png",
-      "description": "sdf",
-      "id": 1
+      "author": "sdf",
+      "coverImage": "s",
+      "description": "s",
+      "id": 2
     },
+    {
+      "title": "wer",
+      "author": "wer",
+      "coverImage": "wer",
+      "description": "wer",
+      "id": 3
+    }
+  ],
+  "zall": [
     {
       "title": "sdf",
       "author": "sdf",
-      "coverImage": "https://miro.medium.com/max/523/1*FgThkysqTLbHMObTVGz97w.png",
-      "description": "sdf",
+      "coverImage": "s",
+      "description": "s",
       "id": 2
     }
-  ]
-}
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+  }

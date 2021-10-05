@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const bookContainer = document.querySelector('#book-container')
 
   const submit = document.getElementById('#submit')
-  const bookURL = 'http://localhost:3000/tamu'
-  // const bookURL = 'https://anww.herokuapp.com/tamu'
+//   const bookURL = 'http://localhost:3002/tamu'
+  const bookURL = 'https://server1-inviit.herokuapp.com/zall'
   const bookForm = document.querySelector('#book-form')
   let allBooks = []
 
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <tr id="book-${book.id}">
           <td>${book.id}</td>
             <td>${book.title}</td>
-            <td>Author: ${book.author}</td>
+            <td>${book.author}</td>
             <td><img src="${book.coverImage}" width="30px" height="50px"></td>
             <td>${book.description}</td>
             <td>         
@@ -84,20 +84,59 @@ document.addEventListener('DOMContentLoaded', function () {
   bookContainer.addEventListener('click', (e) => {
     if (e.target.dataset.action === 'edit') {
       const editButton = document.querySelector(`#edit-${e.target.dataset.id}`)
-      editButton.disabled = true
+      editButton
+      document.querySelectorAll(`.btn`).disabled = true
+
 
 
       const bookData = allBooks.find((book) => {
         return book.id == e.target.dataset.id
       })
-      e.target.parentElement.innerHTML += `
+      document.getElementById("create-book").classList.add("none");
+      document.getElementById('book').innerHTML = `
       <div id='edit-book'>
         <form id="edit-form">
-          <input required id="edit-title" placeholder="${bookData.title}">
-          <input required id="edit-author" placeholder="${bookData.author}">
-          <input required id="edit-coverImage" placeholder="${bookData.coverImage}">
-          <input required id="edit-description" placeholder="${bookData.description}">
+        <table cellpadding="10" cellspacing="10" border="0">
+        <tr>
+          <td> <span>Title : </span></td>
+          <td> <input id="edit-title" placeholder="title..." class="form-control"  value="${bookData.title}"><br></td>
+        </tr>
+        <tr>
+          <td>
+            <span>Author : </span>
+          </td>
+          <td>
+            <input id="edit-author" placeholder="author..." class="form-control" value="${bookData.author}"><br>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span>Cover image link : </span>
+          </td>
+          <td>
+            <input id="edit-coverImage" placeholder="cover-image..." class="form-control" value="${bookData.coverImage}" ><br>
+          </td>
+        </tr>
+        <tr>
+        <td><img src="${bookData.coverImage}" width="100px" height="200px"></td>
+          
+        </tr>
+        <tr>
+          <td>
+            <span>Desk : </span>
+          </td>
+          <td>
+            <input id="edit-description" placeholder="description..." class="form-control"  value="${bookData.description}"><br>
+          </td>
+        </tr>
+        <tr>
+          <td>
           <input type="submit" value="Edit Book">
+          </td>
+        </tr>
+      </table>
+         
+          </form>
       </div>`
 
       const editForm = document.querySelector('#edit-form')
@@ -122,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         }).then(response => response.json())
           .then(book => {
-            editedBook.innerHTML = `
+            editedBook.outerHTML = `
         <tr id="book-${book.id}">
         <td>${book.id}</td>
           <td>${book.title}</td>
